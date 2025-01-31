@@ -8,3 +8,4 @@
 - Technologies Used - Html , css , javascript
 - Role - Frontend
 - How to reach me : with my [linkedin](https://linkedin.com/in/nima-pourdad-b2a5bb331)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/YOUR_LINKEDIN_USERNAME/)
