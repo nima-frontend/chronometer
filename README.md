@@ -1,7 +1,7 @@
 # Chronometer
 **Here's a chronometer with multiple tasks that can save shots in the form of a list**
 
-![calculator](https://github.com/user-attachments/assets/a366df2a-e664-4a7b-838d-f5d9030ae0c7)
+![chronometer](https://github.com/user-attachments/assets/d968c0d7-737d-4b90-9cec-b9bdd8e1f9f8)
 - [Demo Project](https://nima-frontend.github.io/chronometer/)
 - Developed by Nima Pourdad
 - Created - 2025-1-31
