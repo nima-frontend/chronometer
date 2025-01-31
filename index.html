@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chronometer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap');
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      color: #333;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .timer {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+    }
+
+    .timer h2 {
+      margin: 0;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .shot-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 350px;
+    }
+
+    #shot {
+      background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+      width: 100%;
+      max-width: 200px;
+    }
+
+    #shot:hover {
+      background: linear-gradient(135deg, #ff8e53, #ff6b6b);
+    }
+
+    .shots-list {
+      width: 100%;
+      text-align: center;
+      font-size: 1.2rem;
+      font-family: 'Roboto Mono', monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .shot-time {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .timer {
+        font-size: 2.5rem;
+      }
+      
+      button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .timer {
+        font-size: 2rem;
+      }
+      
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="timer">
+    <h2 id="minutes">00</h2>
+    <h2>:</h2>
+    <h2 id="seconds">00</h2>
+    <h2>:</h2>
+    <h2 id="milliseconds">00</h2>
+  </div>
+
+  <div class="buttons">
+    <button id="start" data-status="off">Start</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <div class="shot-container">
+    <button id="shot">Shot</button>
+    <div class="shots-list" id="shots"></div>
+  </div>
+
+  <script>
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const millisecondsEl = document.getElementById("milliseconds");
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const resetBtn = document.getElementById("reset");
+    const shotBtn = document.getElementById("shot");
+    const shotsContainer = document.getElementById("shots");
+
+    let ms = 0;
+    let s = 0;
+    let m = 0;
+    let interval;
+    let isRunning = false;
+
+    function updateTimer() {
+      millisecondsEl.textContent = ms < 10 ? "0" + ms : ms;
+      secondsEl.textContent = s < 10 ? "0" + s : s;
+      minutesEl.textContent = m < 10 ? "0" + m : m;
+    }
+
+    startBtn.addEventListener("click", () => {
+      if (!isRunning) {
+        interval = setInterval(() => {
+          ms++;
+          if (ms === 100) {
+            ms = 0;
+            s++;
+          }
+          if (s === 60) {
+            s = 0;
+            m++;
+          }
+          updateTimer();
+        }, 10);
+        isRunning = true;
+      }
+    });
+
+    stopBtn.addEventListener("click", () => {
+      clearInterval(interval);
+      isRunning = false;
+    });
+
+    resetBtn.addEventListener("click", () => {
+      clearInterval(interval);
+      ms = 0;
+      s = 0;
+      m = 0;
+      updateTimer();
+      shotsContainer.innerHTML = "";
+      isRunning = false;
+    });
+
+    shotBtn.addEventListener("click", () => {
+      if (!isRunning) return;
+      const shotTime = `${m < 10 ? "0" + m : m}:${s < 10 ? "0" + s : s}:${ms < 10 ? "0" + ms : ms}`;
+      const shotEntry = document.createElement("div");
+      shotEntry.classList.add("shot-time");
+      shotEntry.textContent = shotTime;
+      shotsContainer.appendChild(shotEntry);
+    });
+
+    updateTimer();
+  </script>
+</body>
+</html>
